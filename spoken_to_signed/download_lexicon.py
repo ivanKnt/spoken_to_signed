@@ -1,6 +1,10 @@
 import argparse
 import csv
 import os
+
+# Set the TFDS data directory to a specific path on a flash drive
+os.environ['TFDS_DATA_DIR'] = 'E:\\file_output'
+
 from datetime import datetime
 from typing import List, Dict
 
