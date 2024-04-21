@@ -18,7 +18,6 @@ def _gloss_to_pose(gloss: Gloss, lexicon: str, spoken_language: str, signed_lang
     pose_lookup = CSVPoseLookup(lexicon)
     return gloss_to_pose(gloss, pose_lookup, spoken_language, signed_language)
 
-
 def _get_models_dir():
     home_dir = os.path.expanduser("~")
     sign_dir = os.path.join(home_dir, ".sign")
@@ -26,7 +25,6 @@ def _get_models_dir():
     models_dir = os.path.join(sign_dir, "models")
     os.makedirs(models_dir, exist_ok=True)
     return models_dir
-
 
 def _pose_to_video(pose: Pose, video_path: str):
     models_dir = _get_models_dir()
@@ -57,7 +55,6 @@ def _pose_to_video(pose: Pose, video_path: str):
                     "--upscale"]
     print(" ".join(args))
     subprocess.run(args, shell=True, check=True)
-
 
 def _text_input_arguments(parser: argparse.ArgumentParser):
     parser.add_argument("--text", type=str, required=True)

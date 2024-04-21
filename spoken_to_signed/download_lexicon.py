@@ -88,7 +88,7 @@ def load_asl_citizen(directory_path: str) -> List[Dict[str, str]]:
     from sign_language_datasets.datasets.config import SignDatasetConfig
 
     config = SignDatasetConfig(name="only-annotations", version="1.0.0", include_video=False, include_pose="holistic")
-    asl_citizen = tfds.load('asl_citizen', builder_kwargs=dict(config=config))
+    dataset = tfds.load('asl_citizen', builder_kwargs=dict(config=config))
 
     with open(_POSE_HEADERS["holistic"], "rb") as buffer:
         pose_header = PoseHeader.read(BufferReader(buffer.read()))
@@ -116,7 +116,7 @@ def load_asl_citizen(directory_path: str) -> List[Dict[str, str]]:
             'path': pose_relative_path,
             'spoken_language': spoken_language,
             'signed_language': signed_language,
-            'words': words,
+            'word': word,
             'start': "0",
             'end': str(len(pose_body.data) / fps),  # pose duration
             'glosses': "",
