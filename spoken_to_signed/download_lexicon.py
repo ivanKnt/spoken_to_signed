@@ -116,7 +116,7 @@ def load_asl_citizen(directory_path: str) -> List[Dict[str, str]]:
             'path': pose_relative_path,
             'spoken_language': spoken_language,
             'signed_language': signed_language,
-            'word': word,
+            'words': word,
             'start': "0",
             'end': str(len(pose_body.data) / fps),  # pose duration
             'glosses': "",
