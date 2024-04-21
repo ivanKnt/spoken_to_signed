@@ -76,6 +76,55 @@ def load_signsuisse(directory_path: str) -> List[Dict[str, str]]:
             'priority': "",
         }
 
+    def load_asl_citizen(directory_path: str) -> List[Dict[str, str]]:
+        try:
+            import sign_language_datasets
+        except ImportError:
+            raise ImportError("Please install sign_language_datasets. pip install sign-language-datasets")
+
+        import tensorflow_datasets as tfds
+        import sign_language_datasets.datasets.asl_citizen as asl_citizen
+        from sign_language_datasets.datasets.asl_citizen.asl_citizen import _POSE_HEADERS
+        from sign_language_datasets.datasets.config import SignDatasetConfig
+
+        config = SignDatasetConfig(name="only-annotations", version="1.0.0", include_video=False, include_pose="holistic")
+        asl_citizen = tfds.load('asl_citizen', builder_kwargs=dict(config=config))
+
+        with open(_POSE_HEADERS["holistic"], "rb") as buffer:
+            pose_header = PoseHeader.read(BufferReader(buffer.read()))
+
+        for datum in tqdm(dataset["train"]):
+            id = datum['id'].numpy().decode('utf-8')
+            pose_id = datum['video_code'].numpy().decode('utf-8')
+            spoken_language = "en"
+            signed_language = "ase"
+            word = datum['text'].numpy().decode('utf-8')
+
+            # Load pose and save to file
+            tf_pose = datum['pose']
+            fps = int(tf_pose["fps"].numpy())
+            if fps == 0:
+                continue
+            pose_body = NumPyPoseBody(fps, tf_pose["data"].numpy(), tf_pose["conf"].numpy())
+            pose = Pose(pose_header, pose_body)
+            pose_relative_path = os.path.join(signed_language, f"{pose_id}.pose")
+            os.makedirs(os.path.join(directory_path, signed_language), exist_ok=True)
+            with open(os.path.join(directory_path, pose_relative_path), "wb") as f:
+                pose.write(f)
+
+            yield {
+                'path': pose_relative_path,
+                'spoken_language': spoken_language,
+                'signed_language': signed_language,
+                'words': words,
+                'start': "0",
+                'end': str(len(pose_body.data) / fps),  # pose duration
+                'glosses': "",
+                'priority': "",
+            }
+
+
+
 
 def normalize_row(row: Dict[str, str]):
     if row['glosses'] == "" and row['words'] != "":
