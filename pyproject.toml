@@ -17,7 +17,7 @@ dependencies = [
     # "spacy", # used for "rules" and "spacylemma" text_to_gloss components
     # "sentencepiece", # used for "nmt" text_to_gloss component
     # "sockeye==3.1.10", # used for "nmt" text_to_gloss component
-    # "sign-language-datasets" # used for download_lexicon script
+    "sign-language-datasets" # used for download_lexicon script
     # "gcsfs", # When files are stored on Google Cloud Storage
 ]
 
