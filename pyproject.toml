@@ -9,6 +9,7 @@ authors = [
 readme = "README.md"
 
 dependencies = [
+    "mediapipe",
     "pose-format>=0.4.1",
     "numpy",
     "scipy", # Used for savgol filter
